@@ -506,7 +506,7 @@ body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--tex
     <div class="nav-item" onclick="showPage('points')"><span class="icon">⭐</span> পয়েন্ট সিস্টেম</div>
     <div class="nav-item" onclick="showPage('profile')"><span class="icon">👤</span> প্রোফাইল</div>
     <div class="nav-item" onclick="showPage('download')"><span class="icon">📱</span> অ্যাপ ডাউনলোড</div>
-    <div class="nav-item" onclick="showPage('login')"><span class="icon">🔐</span> লগইন / রেজিস্ট্রেশন</div>
+
   </div>
   <div class="sidebar-user" onclick="showPage('profile')">
     <div class="user-avatar">র</div>
@@ -1277,7 +1277,7 @@ function renderRecentBooks(){
         <div class="book-author">${b.author}</div>
         <div class="book-meta-row">${getTypeChip(b.type)}<span class="chip chip-muted">${b.cat}</span></div>
       </div>
-      <button class="book-action" onclick="showToast('রিকোয়েস্ট পাঠানো হয়েছে ✓','success');event.stopPropagation()">রিকোয়েস্ট</button>
+      <button class="book-action" style="${b.type==='free'?'background:var(--green-dim);color:var(--green);border-color:rgba(46,204,113,.2)':b.type==='sell'?'background:var(--red-dim);color:var(--red);border-color:rgba(231,76,60,.2)':''}" onclick="showToast('${b.type==='free'?'বিনামূল্যে নেওয়ার অনুরোধ পাঠানো হয়েছে':b.type==='swap'?'বিনিময়ের অনুরোধ পাঠানো হয়েছে':'কিনতে অনুরোধ পাঠানো হয়েছে'} ✓','success');event.stopPropagation()">${b.type==='free'?'🎁 নিতে চাই':b.type==='swap'?'🔄 বিনিময়':'💰 কিনতে চাই'}</button>
     </div>`).join('');
 }
 
@@ -1317,7 +1317,12 @@ function renderBooksGrid(list){
           <div class="bcb-user"><div class="mini-avatar" style="background:${b.userColor}">${b.userInitial}</div><span class="bcb-uname">${b.user}</span></div>
           <span class="bcb-rating">★ ${b.rating}</span>
         </div>
-        <button class="request-btn" onclick="showToast('বিনিময়ের অনুরোধ পাঠানো হয়েছে!','success')">বিনিময়ের অনুরোধ করুন</button>
+        ${b.type==='free'
+          ? `<button class="request-btn" style="background:var(--green-dim);color:var(--green);border-color:rgba(46,204,113,.2)" onmouseover="this.style.background='var(--green)';this.style.color='var(--bg)'" onmouseout="this.style.background='var(--green-dim)';this.style.color='var(--green)'" onclick="showToast('বিনামূল্যে নেওয়ার অনুরোধ পাঠানো হয়েছে! ✓','success')">🎁 বিনামূল্যে নেওয়ার অনুরোধ করুন</button>`
+          : b.type==='swap'
+          ? `<button class="request-btn" onclick="showToast('বিনিময়ের অনুরোধ পাঠানো হয়েছে! ✓','success')">🔄 বিনিময়ের অনুরোধ করুন</button>`
+          : `<button class="request-btn" style="background:var(--red-dim);color:var(--red);border-color:rgba(231,76,60,.2)" onmouseover="this.style.background='var(--red)';this.style.color='#fff'" onmouseout="this.style.background='var(--red-dim)';this.style.color='var(--red)'" onclick="showToast('বিক্রয়ের অনুরোধ পাঠানো হয়েছে! ✓','success')">💰 কিনতে অনুরোধ করুন</button>`
+        }
         <button class="cart-btn" onclick="openChatFor('${b.user}')">💬 কথা বলুন</button>
       </div>
     </div>`).join('');
